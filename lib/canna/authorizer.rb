@@ -51,8 +51,20 @@ module Canna
     end
 
     private
-    def authorize(action, receiver, *args, **kwargs)
-      receiver.send("authorize_to_#{action}", *args, **kwargs)
+    # in ruby < 2.7, **{} passes empty hash as argument
+    # https://www.ruby-lang.org/en/news/2019/12/12/separation-of-positional-and-keyword-arguments-in-ruby-3-0/#other-minor-changes-empty-hash
+    if Gem::Version.new(RUBY_VERSION) < Gem::Version.new("2.7.0")
+      def authorize(action, receiver, *args, **kwargs)
+        if kwargs.empty?
+          receiver.send("authorize_to_#{action}", *args)
+        else
+          receiver.send("authorize_to_#{action}", *args, **kwargs)
+        end
+      end
+    else
+      def authorize(action, receiver, *args, **kwargs)
+        receiver.send("authorize_to_#{action}", *args, **kwargs)
+      end
     end
   end
 end
