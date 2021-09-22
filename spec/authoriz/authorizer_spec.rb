@@ -14,7 +14,7 @@ module Authoriz
 
     describe "can" do
       it "calls Result.can and return when authorize_to_*" do
-        block = Proc.new {}
+        block = proc {}
         result = double(:result)
 
         expect(resource).to receive(:authorize_to_show).with(1, 2, 3, d: 4).and_return("Unauthorized")
@@ -24,10 +24,9 @@ module Authoriz
       end
     end
 
-
     describe "cannot" do
       it "calls Result.cannot and return when authorize_to_*" do
-        block = Proc.new {}
+        block = proc {}
         result = double(:result)
 
         expect(resource).to receive(:authorize_to_show).with(1, 2, 3, d: 4).and_return("Unauthorized")

@@ -8,15 +8,17 @@ module Authoriz
       @receiver = receiver
       @args = args
       @kwargs = kwargs
+      super(build_message)
     end
 
-    def message
+    private
+    def build_message
       arguments = [
         action,
         receiver,
         *args,
       ].inspect
-      arguments << kwargs.map {|k, v| ", #{k}: #{v.inspect}"}.join
+      arguments << kwargs.map {|k, v| ", #{k}: #{v.inspect}" }.join
 
       "Cannot #{arguments} because #{reason}"
     end
@@ -49,7 +51,7 @@ module Authoriz
     end
 
     private
-    def authorize(action, receiver, *args, **kwargs, &block)
+    def authorize(action, receiver, *args, **kwargs)
       receiver.send("authorize_to_#{action}", *args, **kwargs)
     end
   end

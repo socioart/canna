@@ -19,13 +19,13 @@ module Authoriz
       @success = true_or_reason == true
       @reason = true_or_reason unless success?
 
-      if block_given?
-        case
-        when type == :can && success?
-          block.call
-        when type == :cannot && !success?
-          block.call(reason)
-        end
+      return unless block_given?
+
+      case
+      when type == :can && success?
+        block.call
+      when type == :cannot && !success?
+        block.call(reason)
       end
     end
 

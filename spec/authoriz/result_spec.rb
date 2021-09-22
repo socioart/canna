@@ -134,7 +134,6 @@ module Authoriz
       end
     end
 
-
     describe "success? and reason" do
       context "constructor's first argument is true" do
         let(:result) { Result.can(true) }
