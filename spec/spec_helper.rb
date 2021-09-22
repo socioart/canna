@@ -1,5 +1,5 @@
 require "bundler/setup"
-require "authoriz"
+require "canna"
 require "byebug"
 
 RSpec.configure do |config|

@@ -1,6 +1,6 @@
 require "action_controller"
 
-module Authoriz
+module Canna
   module Rails
     module ControllerHelper
       module ClassMethods
