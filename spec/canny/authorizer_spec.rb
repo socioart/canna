@@ -22,6 +22,38 @@ module Canny
 
         expect(authorizer.can(:show, resource, 1, 2, 3, d: 4, &block)).to eq result
       end
+
+      context "default argument validation success" do
+        let(:authorizer) {
+          Authorizer.new(:foo, bar: :baz).with_validator {|v, bar:| (v == :foo && bar == :baz) || "invalid argument" }
+        }
+
+        it "calls Result.can and return when authorize_to_*" do
+          block = proc {}
+          result = double(:result)
+
+          expect(resource).to receive(:authorize_to_show).with(:foo, 1, 2, 3, bar: :baz, d: 4).and_return("Unauthorized")
+          expect(Result).to receive(:can).with("Unauthorized", &block).and_return(result)
+
+          expect(authorizer.can(:show, resource, 1, 2, 3, d: 4, &block)).to eq result
+        end
+      end
+
+      context "default argument validation fail" do
+        let(:authorizer) {
+          Authorizer.new(:foobar, bar: :baz).with_validator {|v, bar:| (v == :foo && bar == :baz) || "invalid argument" }
+        }
+
+        it "cannot call authorize_to_* and unauthorize" do
+          block = proc {}
+          result = double(:result)
+
+          expect(resource).not_to receive(:authorize_to_show)
+          expect(Result).to receive(:can).with("invalid argument", &block).and_return(result)
+
+          expect(authorizer.can(:show, resource, 1, 2, 3, d: 4, &block)).to eq result
+        end
+      end
     end
 
     describe "cannot" do
