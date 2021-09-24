@@ -68,11 +68,11 @@ module Canny
         }.not_to raise_error
       end
 
-      it "raises UnauthorizedError when authorize_to_* returns except true" do
+      it "raises Unauthorized when authorize_to_* returns except true" do
         expect(resource).to receive(:authorize_to_show).with(1, 2, 3, d: 4).and_return("Unauthorized")
         expect {
           authorizer.authorize!(:show, resource, 1, 2, 3, d: 4)
-        }.to raise_error(UnauthorizedError)
+        }.to raise_error(Unauthorized)
       end
     end
   end

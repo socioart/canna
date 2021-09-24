@@ -7,3 +7,4 @@ end
 
 require "canny/authorizer"
 require "canny/result"
+require "canny/unauthorized"

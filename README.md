@@ -105,7 +105,7 @@ class DocumentController <_ApplicationController
 
   def index
     # 認可時は何もしません。
-    # 不認可時は Canny::UnauthorizedError を raise するので、通常は ApplicationController#rescue_from でこのときの処理を記述してください。
+    # 不認可時は Canny::Unauthorized を raise するので、通常は ApplicationController#rescue_from でこのときの処理を記述してください。
     # 下記の例では Document.authorize_to_index(current_user, project: project) が呼ばれます。
     authorize! :index, Document, project: @project
     # ...

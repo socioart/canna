@@ -1,29 +1,4 @@
 module Canny
-  class UnauthorizedError < StandardError
-    attr_reader :reason, :action, :receiver, :args, :kwargs
-
-    def initialize(reason, action, receiver, *args, **kwargs)
-      @reason = reason
-      @action = action
-      @receiver = receiver
-      @args = args
-      @kwargs = kwargs
-      super(build_message)
-    end
-
-    private
-    def build_message
-      arguments = [
-        action,
-        receiver,
-        *args,
-      ].inspect
-      arguments << kwargs.map {|k, v| ", #{k}: #{v.inspect}" }.join
-
-      "Cannot #{arguments} because #{reason}"
-    end
-  end
-
   class Authorizer
     attr_reader :default_args, :default_kwargs
 
@@ -54,7 +29,7 @@ module Canny
       true_or_reason = authorize(action, receiver, *args, **kwargs)
       return if true_or_reason == true
 
-      raise UnauthorizedError.new(true_or_reason, action, receiver, *args, **kwargs)
+      raise Unauthorized.new(true_or_reason, action, receiver, *args, **kwargs)
     end
 
     # in ruby < 2.7, **{} passes empty hash as argument
