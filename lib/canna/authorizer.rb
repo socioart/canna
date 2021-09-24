@@ -50,7 +50,6 @@ module Canna
       raise UnauthorizedError.new(true_or_reason, action, receiver, *args, **kwargs)
     end
 
-    private
     # in ruby < 2.7, **{} passes empty hash as argument
     # https://www.ruby-lang.org/en/news/2019/12/12/separation-of-positional-and-keyword-arguments-in-ruby-3-0/#other-minor-changes-empty-hash
     if Gem::Version.new(RUBY_VERSION) < Gem::Version.new("2.7.0")

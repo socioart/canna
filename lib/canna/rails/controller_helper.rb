@@ -76,6 +76,26 @@ module Canna
 
       module InstanceMethods
         private
+        def can(action, receiver, *args, **kwargs, &block)
+          authorizer.can(action, receiver, current_user, *args, **kwargs, &block)
+        end
+
+        def cannot(action, receiver, *args, **kwargs, &block)
+          authorizer.cannot(action, receiver, current_user, *args, **kwargs, &block)
+        end
+
+        def can?(action, receiver, *args, **kwargs)
+          authorizer.can?(action, receiver, current_user, *args, **kwargs) == true
+        end
+
+        def cannot?(action, receiver, *args, **kwargs)
+          authorizer.cannot?(action, receiver, current_user, *args, **kwargs) != true
+        end
+
+        def authorize(action, receiver, *args, **kwargs)
+          authorizer.authorize(action, receiver, current_user, *args, **kwargs)
+        end
+
         # @param action [Symbol]
         # @param receiver [Object]
         # @param args [Array]
@@ -129,8 +149,11 @@ module Canna
       end
 
       def self.included(klass)
-        klass.extend ClassMethods
-        klass.include InstanceMethods
+        klass.class_eval do
+          extend ClassMethods
+          include InstanceMethods
+          helper_method :can?, :cannot?, :can, :cannot, :authorize if respond_to?(:helper_method)
+        end
       end
     end
   end
