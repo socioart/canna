@@ -77,23 +77,23 @@ module Canna
       module InstanceMethods
         private
         def can(action, receiver, *args, **kwargs, &block)
-          authorizer.can(action, receiver, current_user, *args, **kwargs, &block)
+          authorizer.can(action, receiver, *args, **kwargs, &block)
         end
 
         def cannot(action, receiver, *args, **kwargs, &block)
-          authorizer.cannot(action, receiver, current_user, *args, **kwargs, &block)
+          authorizer.cannot(action, receiver, *args, **kwargs, &block)
         end
 
         def can?(action, receiver, *args, **kwargs)
-          authorizer.can?(action, receiver, current_user, *args, **kwargs) == true
+          authorizer.can?(action, receiver, *args, **kwargs) == true
         end
 
         def cannot?(action, receiver, *args, **kwargs)
-          authorizer.cannot?(action, receiver, current_user, *args, **kwargs) != true
+          authorizer.cannot?(action, receiver, *args, **kwargs) != true
         end
 
         def authorize(action, receiver, *args, **kwargs)
-          authorizer.authorize(action, receiver, current_user, *args, **kwargs)
+          authorizer.authorize(action, receiver, *args, **kwargs)
         end
 
         # @param action [Symbol]
@@ -101,7 +101,7 @@ module Canna
         # @param args [Array]
         # @param kwargs [Hash]
         def authorize!(action, receiver, *args, **kwargs)
-          authorizer.authorize!(action, receiver, current_user, *args, **kwargs)
+          authorizer.authorize!(action, receiver, *args, **kwargs)
         end
 
         # @param klass [Class]
@@ -139,7 +139,7 @@ module Canna
 
         # @return [Authorizer]
         def authorizer
-          @authorizer ||= Authorizer.new
+          @authorizer ||= Authorizer.new(current_user)
         end
 
         # @return [Set<Symbol>]

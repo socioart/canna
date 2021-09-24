@@ -32,11 +32,11 @@ module Canna
       let(:response) { ActionDispatch::Response.create }
       let(:current_user) { double(:current_user) }
 
-      before do
-        allow(controller).to receive(:current_user).and_return(current_user)
-      end
-
       describe ".authorize_action" do
+        before do
+          allow(controller).to receive(:current_user).and_return(current_user)
+        end
+
         context "with no arguments" do
           before do
             allow(controller_class).to receive(:name).and_return("Project::DocumentsController")
@@ -236,6 +236,10 @@ module Canna
 
       describe "(private) authorize_action!" do
         before do
+          allow(controller).to receive(:current_user).and_return(current_user)
+        end
+
+        before do
           controller.instance_variable_set(:@foo, model)
         end
 
@@ -285,10 +289,24 @@ module Canna
       end
 
       describe "(private) authorize!" do
-        it "calls Authorizer#authorize! with current_user" do
-          expect_any_instance_of(Authorizer).to receive(:authorize!).with(:show, model, current_user, 1, 2, foobar: 3)
-          expect(controller).to receive(:current_user).and_return(current_user)
+        it "calls authorizer.authorize!" do
+          authorizer = Authorizer.new(current_user)
+          expect(controller).to receive(:authorizer).and_return(authorizer)
+          expect(authorizer).to receive(:authorize!).with(:show, model, 1, 2, foobar: 3)
           controller.send(:authorize!, :show, model, 1, 2, foobar: 3)
+        end
+      end
+
+      describe "(private) authorizer" do
+        before do
+          expect(controller).to receive(:current_user).and_return(current_user)
+        end
+
+        it "Authorizer.new(current_user)" do
+          authorizer = controller.send(:authorizer)
+          expect(authorizer).to be_an Authorizer
+          expect(authorizer.default_args).to eq [current_user]
+          expect(authorizer.default_kwargs).to eq({})
         end
       end
     end

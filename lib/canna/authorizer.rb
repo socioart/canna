@@ -25,6 +25,13 @@ module Canna
   end
 
   class Authorizer
+    attr_reader :default_args, :default_kwargs
+
+    def initialize(*default_args, **default_kwargs)
+      @default_args = default_args
+      @default_kwargs = default_kwargs
+    end
+
     def can(action, receiver, *args, **kwargs, &block)
       true_or_reason = authorize(action, receiver, *args, **kwargs)
       Result.can(true_or_reason, &block)
@@ -54,6 +61,9 @@ module Canna
     # https://www.ruby-lang.org/en/news/2019/12/12/separation-of-positional-and-keyword-arguments-in-ruby-3-0/#other-minor-changes-empty-hash
     if Gem::Version.new(RUBY_VERSION) < Gem::Version.new("2.7.0")
       def authorize(action, receiver, *args, **kwargs)
+        args = default_args + args
+        kwargs = default_kwargs.merge(kwargs)
+
         if kwargs.empty?
           receiver.send("authorize_to_#{action}", *args)
         else
@@ -62,6 +72,8 @@ module Canna
       end
     else
       def authorize(action, receiver, *args, **kwargs)
+        args = default_args + args
+        kwargs = default_kwargs.merge(kwargs)
         receiver.send("authorize_to_#{action}", *args, **kwargs)
       end
     end
