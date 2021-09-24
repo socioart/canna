@@ -2,11 +2,13 @@ module Canna
   class Result
     class << self
       def can(true_or_reason, &block_for_can)
-        new(:can, true_or_reason, &block_for_can)
+        result = new(:can, true_or_reason)
+        block_for_can ? result.run(&block_for_can) : result
       end
 
       def cannot(true_or_reason, &block_for_cannot)
-        new(:cannot, true_or_reason, &block_for_cannot)
+        result = new(:cannot, true_or_reason)
+        block_for_cannot ? result.run(&block_for_cannot) : result
       end
 
       private :new
@@ -14,12 +16,23 @@ module Canna
 
     attr_reader :reason, :type, :value
 
-    def initialize(type, true_or_reason, &block)
+    def initialize(type, true_or_reason)
       @type = type
       @success = true_or_reason == true
       @reason = true_or_reason unless success?
+      @run_called = false
+      @else_called = false
+    end
 
-      return unless block_given?
+    def success?
+      @success
+    end
+
+    def run(&block)
+      raise ArgumentError, "#{self.class}#run requires block" unless block_given?
+      raise "#{self.class}#run cannot call twice" if @run_called
+
+      @run_called = true
 
       case
       when type == :can && success?
@@ -27,13 +40,16 @@ module Canna
       when type == :cannot && !success?
         @value = block.call(reason)
       end
-    end
 
-    def success?
-      @success
+      self
     end
 
     def else(&block)
+      raise ArgumentError, "#{self.class}#else requires block" unless block_given?
+      raise "#{self.class}#else cannot call twice" if @else_called
+
+      @else_called = true
+
       case
       when type == :can && !success?
         @value = block.call(reason)

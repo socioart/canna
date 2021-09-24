@@ -163,5 +163,77 @@ module Canna
         end
       end
     end
+
+    describe "run" do
+      context "call twice" do
+        context "run block" do
+          it "raises error" do
+            first = double(:first)
+            expect(first).to receive(:call)
+            second = double(:second)
+            expect(second).not_to receive(:call)
+
+            r = Result.can(true)
+            r.run { first.call }
+
+            expect {
+              r.run { second.call }
+            }.to raise_error(RuntimeError)
+          end
+        end
+
+        context "not run block" do
+          it "raises error" do
+            first = double(:first)
+            expect(first).not_to receive(:call)
+            second = double(:second)
+            expect(second).not_to receive(:call)
+
+            r = Result.can(false)
+            r.run { first.call }
+
+            expect {
+              r.run { second.call }
+            }.to raise_error(RuntimeError)
+          end
+        end
+      end
+    end
+
+    describe "else" do
+      context "call twice" do
+        context "run block" do
+          it "raises error" do
+            first = double(:first)
+            expect(first).to receive(:call)
+            second = double(:second)
+            expect(second).not_to receive(:call)
+
+            r = Result.can(false)
+            r.else { first.call }
+
+            expect {
+              r.else { second.call }
+            }.to raise_error(RuntimeError)
+          end
+        end
+
+        context "not run block" do
+          it "raises error" do
+            first = double(:first)
+            expect(first).not_to receive(:call)
+            second = double(:second)
+            expect(second).not_to receive(:call)
+
+            r = Result.can(true)
+            r.else { first.call }
+
+            expect {
+              r.else { second.call }
+            }.to raise_error(RuntimeError)
+          end
+        end
+      end
+    end
   end
 end
