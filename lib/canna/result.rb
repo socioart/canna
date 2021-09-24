@@ -12,7 +12,7 @@ module Canna
       private :new
     end
 
-    attr_reader :reason, :type
+    attr_reader :reason, :type, :value
 
     def initialize(type, true_or_reason, &block)
       @type = type
@@ -23,9 +23,9 @@ module Canna
 
       case
       when type == :can && success?
-        block.call
+        @value = block.call
       when type == :cannot && !success?
-        block.call(reason)
+        @value = block.call(reason)
       end
     end
 
@@ -36,11 +36,11 @@ module Canna
     def else(&block)
       case
       when type == :can && !success?
-        block.call(reason)
+        @value = block.call(reason)
       when type == :cannot && success?
-        block.call
+        @value = block.call
       end
-      nil # ignores the return value of block (like constructor's block)
+      self
     end
   end
 end

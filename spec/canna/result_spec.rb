@@ -4,132 +4,144 @@ module Canna
   RSpec.describe Result do
     describe ".can" do
       context "first argument is true" do
-        it "runs block" do
+        it "runs block and store value" do
           foo = double(:foo)
-          expect(foo).to receive(:success)
+          expect(foo).to receive(:success).and_return("success")
 
-          Result.can(true) {
+          r = Result.can(true) {
             foo.success
           }
+          expect(r.value).to eq "success"
         end
 
-        it "runs block and does not run else block" do
+        it "runs block and store value, and does not run else block" do
           foo = double(:foo)
-          expect(foo).to receive(:success)
+          expect(foo).to receive(:success).and_return("success")
           expect(foo).not_to receive(:fail)
 
-          Result.can(true) {
+          r = Result.can(true) {
             foo.success
           }.else {|reason|
             foo.fail(reason)
           }
+          expect(r.value).to eq "success"
         end
 
-        it "does not run else block" do
+        it "does not run else block and value is nil" do
           foo = double(:foo)
           expect(foo).not_to receive(:fail)
 
-          Result.can(true).else {|reason|
+          r = Result.can(true).else {|reason|
             foo.fail(reason)
           }
+          expect(r.value).to eq nil
         end
       end
 
       context "first argument is not true" do
-        it "does not run block" do
+        it "does not run block and value is nil" do
           foo = double(:foo)
           expect(foo).not_to receive(:success)
 
-          Result.can("Unauthorized") {
+          r = Result.can("Unauthorized") {
             foo.success
           }
+          expect(r.value).to eq nil
         end
 
-        it "does not run block and run else block" do
+        it "does not run block, and run else block and store value" do
           foo = double(:foo)
           expect(foo).not_to receive(:success)
-          expect(foo).to receive(:fail).with("Unauthorized")
+          expect(foo).to receive(:fail).with("Unauthorized").and_return("fail")
 
-          Result.can("Unauthorized") {
+          r = Result.can("Unauthorized") {
             foo.success
           }.else {|reason|
             foo.fail(reason)
           }
+          expect(r.value).to eq "fail"
         end
 
-        it "runs else block" do
+        it "runs else block and store value" do
           foo = double(:foo)
-          expect(foo).to receive(:fail).with("Unauthorized")
+          expect(foo).to receive(:fail).with("Unauthorized").and_return("fail")
 
-          Result.can("Unauthorized").else {|reason|
+          r = Result.can("Unauthorized").else {|reason|
             foo.fail(reason)
           }
+          expect(r.value).to eq "fail"
         end
       end
     end
 
     describe ".cannot" do
       context "first argument is true" do
-        it "does not run block" do
+        it "does not run block and value is nil" do
           foo = double(:foo)
           expect(foo).not_to receive(:fail)
 
-          Result.cannot(true) {|reason|
+          r = Result.cannot(true) {|reason|
             foo.fail(reason)
           }
+          expect(r.value).to eq nil
         end
 
-        it "does not run block and runs else block" do
+        it "does not run block, and runs else block and store value" do
           foo = double(:foo)
           expect(foo).not_to receive(:fail)
-          expect(foo).to receive(:success)
+          expect(foo).to receive(:success).and_return("success")
 
-          Result.cannot(true) {|reason|
+          r = Result.cannot(true) {|reason|
             foo.fail(reason)
           }.else {
             foo.success
           }
+          expect(r.value).to eq "success"
         end
 
-        it "runs else block" do
+        it "runs else block and store value" do
           foo = double(:foo)
-          expect(foo).to receive(:success)
+          expect(foo).to receive(:success).and_return("success")
 
-          Result.cannot(true).else {
+          r = Result.cannot(true).else {
             foo.success
           }
+          expect(r.value).to eq "success"
         end
       end
 
       context "first argument is not true" do
-        it "runs block" do
+        it "runs block and store value" do
           foo = double(:foo)
-          expect(foo).to receive(:fail).with("Unauthorized")
+          expect(foo).to receive(:fail).with("Unauthorized").and_return("fail")
 
-          Result.cannot("Unauthorized") {|reason|
+          r = Result.cannot("Unauthorized") {|reason|
             foo.fail(reason)
           }
+          expect(r.value).to eq "fail"
         end
 
         it "runs block and does not run else block" do
           foo = double(:foo)
-          expect(foo).to receive(:fail).with("Unauthorized")
+          expect(foo).to receive(:fail).with("Unauthorized").and_return("fail")
           expect(foo).not_to receive(:success)
 
-          Result.cannot("Unauthorized") {|reason|
+          r = Result.cannot("Unauthorized") {|reason|
             foo.fail(reason)
           }.else {
             foo.success
           }
+          expect(r.value).to eq "fail"
         end
 
-        it "does not run else block" do
+        it "does not run else block and value is nil" do
           foo = double(:foo)
           expect(foo).not_to receive(:success)
 
-          Result.cannot("Unauthorized").else {
+          r = Result.cannot("Unauthorized").else {
             foo.success
           }
+          expect(r.value).to eq nil
         end
       end
     end
