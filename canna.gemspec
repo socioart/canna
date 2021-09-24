@@ -1,22 +1,22 @@
-require_relative "lib/canna/version"
+require_relative "lib/canny/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "canna"
-  spec.version       = Canna::VERSION
+  spec.name          = "canny"
+  spec.version       = Canny::VERSION
   spec.authors       = ["labocho"]
   spec.email         = ["labocho@penguinlab.jp"]
 
   spec.summary       = "Method base authorization library for Rails or any application."
   spec.description   = "Method base authorization library for Rails or any application."
-  spec.homepage      = "https://github.com/labocho/canna"
+  spec.homepage      = "https://github.com/labocho/canny"
   spec.license       = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.5.0")
 
   # spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
 
   spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = "https://github.com/labocho/canna"
-  spec.metadata["changelog_uri"] = "https://github.com/labocho/canna/blob/master/CHANGELOG.md"
+  spec.metadata["source_code_uri"] = "https://github.com/labocho/canny"
+  spec.metadata["changelog_uri"] = "https://github.com/labocho/canny/blob/master/CHANGELOG.md"
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.

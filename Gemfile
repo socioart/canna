@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-# Specify your gem's dependencies in canna.gemspec
+# Specify your gem's dependencies in canny.gemspec
 gemspec
 
 gem "actionpack", "~> 6.1"

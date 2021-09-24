@@ -1,5 +1,5 @@
 require "bundler/setup"
-require "canna"
+require "canny"
 require "byebug"
 
 RSpec.configure do |config|

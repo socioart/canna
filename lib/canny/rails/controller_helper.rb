@@ -1,6 +1,6 @@
 require "action_controller"
 
-module Canna
+module Canny
   module Rails
     module ControllerHelper
       module ClassMethods

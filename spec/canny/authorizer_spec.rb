@@ -1,6 +1,6 @@
 require "spec_helper"
 
-module Canna
+module Canny
   RSpec.describe Authorizer do
     let(:authorizer) { Authorizer.new }
     let(:resource_class) {

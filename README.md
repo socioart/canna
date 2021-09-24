@@ -1,6 +1,6 @@
-# Canna
+# Canny
 
-Canna (カンナ) は認可ロジックの記述を支援するライブラリです。
+Canny は認可ロジックの記述を支援するライブラリです。
 下記の特徴があります。
 
 * No DSL: 認可ロジックは DSL でなく、メソッドとして記述します。これによりクラスごとのコードの分離が可能になり、テストやメタプログラミングも容易になります。
@@ -13,13 +13,13 @@ Canna (カンナ) は認可ロジックの記述を支援するライブラリ�
 Add this line to your application's Gemfile:
 
 ```ruby
-gem "canna"
+gem "canny"
 ```
 
 If you use Ruby on Rails:
 
 ```ruby
-gem "canna", require: "canna/rails"
+gem "canny", require: "canny/rails"
 ```
 
 And then execute:
@@ -28,7 +28,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install canna
+    $ gem install canny
 
 ## Usage
 
@@ -55,7 +55,7 @@ class Document < ApplicationRecord
 end
 
 # Authorizer のコンストラクタの引数は任意です。引数は認可メソッド呼び出し時の引数に必ず追加されます。
-authorizer = Canna::Authorizer.new(current_user)
+authorizer = Canny::Authorizer.new(current_user)
 
 # can?, cannot? メソッドは単純に `true` (認可) or `false` (不認可) を返します。
 authorizer.can?(:index, Document, project: project) # => 認可時は `true`、不認可時は `false`
@@ -105,7 +105,7 @@ class DocumentController <_ApplicationController
 
   def index
     # 認可時は何もしません。
-    # 不認可時は Canna::UnauthorizedError を raise するので、通常は ApplicationController#rescue_from でこのときの処理を記述してください。
+    # 不認可時は Canny::UnauthorizedError を raise するので、通常は ApplicationController#rescue_from でこのときの処理を記述してください。
     # 下記の例では Document.authorize_to_index(current_user, project: project) が呼ばれます。
     authorize! :index, Document, project: @project
     # ...
@@ -153,7 +153,7 @@ class DocumentController <_ApplicationController
 end
 ```
 
-authorize_action についての詳しい情報は `Canna::Rails::ControllerHelper::ClassMethods#authorize_resource` のドキュメントを参照してください。
+authorize_action についての詳しい情報は `Canny::Rails::ControllerHelper::ClassMethods#authorize_resource` のドキュメントを参照してください。
 
 また、`can?`, `cannot?`, `can`, `cannot` メソッドについてもコントローラ及びビューで使用することができます。
 
@@ -165,7 +165,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/canna.
+Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/canny.
 
 
 ## License

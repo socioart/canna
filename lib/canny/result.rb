@@ -1,4 +1,4 @@
-module Canna
+module Canny
   class Result
     class << self
       def can(true_or_reason, &block_for_can)

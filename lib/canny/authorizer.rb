@@ -1,4 +1,4 @@
-module Canna
+module Canny
   class UnauthorizedError < StandardError
     attr_reader :reason, :action, :receiver, :args, :kwargs
 

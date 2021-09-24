@@ -1,6 +1,6 @@
 require "spec_helper"
 
-module Canna
+module Canny
   RSpec.describe Result do
     describe ".can" do
       context "first argument is true" do

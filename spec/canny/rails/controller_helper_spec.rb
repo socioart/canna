@@ -1,7 +1,7 @@
 require "spec_helper"
-require "canna/rails"
+require "canny/rails"
 
-module Canna
+module Canny
   module Rails
     RSpec.describe ControllerHelper do
       let(:controller_class) do
