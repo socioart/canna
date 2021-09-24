@@ -18,14 +18,14 @@ module Canna
 
     def initialize(type, true_or_reason)
       @type = type
-      @success = true_or_reason == true
-      @reason = true_or_reason unless success?
+      @authorized = true_or_reason == true
+      @reason = true_or_reason unless authorized?
       @run_called = false
       @else_called = false
     end
 
-    def success?
-      @success
+    def authorized?
+      @authorized
     end
 
     def run(&block)
@@ -35,9 +35,9 @@ module Canna
       @run_called = true
 
       case
-      when type == :can && success?
+      when type == :can && authorized?
         @value = block.call
-      when type == :cannot && !success?
+      when type == :cannot && !authorized?
         @value = block.call(reason)
       end
 
@@ -51,9 +51,9 @@ module Canna
       @else_called = true
 
       case
-      when type == :can && !success?
+      when type == :can && !authorized?
         @value = block.call(reason)
-      when type == :cannot && success?
+      when type == :cannot && authorized?
         @value = block.call
       end
       self

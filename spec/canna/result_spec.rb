@@ -146,11 +146,11 @@ module Canna
       end
     end
 
-    describe "success? and reason" do
+    describe "authorized? and reason" do
       context "constructor's first argument is true" do
         let(:result) { Result.can(true) }
         it "returns true for succes?, nil fo reason" do
-          expect(result.success?).to eq true
+          expect(result.authorized?).to eq true
           expect(result.reason).to eq nil
         end
       end
@@ -158,7 +158,7 @@ module Canna
       context "constructor's first argument is not true" do
         let(:result) { Result.can("Unauthorized") }
         it "returns false for succes?, first argument fo reason" do
-          expect(result.success?).to eq false
+          expect(result.authorized?).to eq false
           expect(result.reason).to eq "Unauthorized"
         end
       end
